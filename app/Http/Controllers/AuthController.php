@@ -60,23 +60,26 @@ class AuthController extends Controller
         return redirect()->route('dashboard');
     }
 
+   
     // Proses register
     public function register(Request $request)
     {
         $request->validate([
-            'role' => 'required',
             'nik_nip_nis' => 'required|max:30',
             'name' => 'required|max:255',
             'username' => 'required|max:50|unique:users,username',
             'password' => 'required|confirmed|min:6',
-            'jenjang' => 'nullable',
-            'kelas' => 'nullable',
+            'jenjang' => 'required|in:TK,SD,SMP',
+            'kelas' => 'required|in:TK A,TK B,Kelas 1,Kelas 2,Kelas 3,Kelas 4,Kelas 5,Kelas 6,Kelas VII,Kelas VIII,Kelas IX',
         ]);
 
         User::create([
             'name' => $request->name,
             'username' => $request->username,
-            'role' => $request->role,
+
+            // Role ditentukan oleh server, bukan dari form
+            'role' => 'siswa',
+
             'nik_nip_nis' => $request->nik_nip_nis,
             'jenjang' => $request->jenjang,
             'kelas' => $request->kelas,
@@ -93,4 +96,5 @@ class AuthController extends Controller
             'Registrasi berhasil! Silakan tunggu persetujuan Admin.'
         );
     }
+
 }

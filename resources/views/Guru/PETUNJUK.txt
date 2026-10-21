@@ -1,0 +1,68 @@
+ABSENSI BHINNEKA — PEMISAHAN HALAMAN GURU
+
+Isi folder:
+- dashboard.blade.php
+- jadwal.blade.php
+- sesi-absensi.blade.php
+
+SALIN KETIGA FILE KE:
+resources/views/guru/dashboard.blade.php
+resources/views/guru/jadwal.blade.php
+resources/views/guru/sesi-absensi.blade.php
+
+JANGAN mengganti AdminController.php atau web.php secara penuh. Tambahkan potongan berikut.
+
+1) Di app/Http/Controllers/AdminController.php, tambahkan dua method berikut di dalam class AdminController, sebelum kurung kurawal class terakhir. Import JadwalPelajaran dan SesiAbsensi sudah ada pada file kamu.
+
+public function jadwalGuru()
+{
+    $user = auth()->user();
+    abort_unless($user->role === 'guru', 403);
+
+    $jadwals = JadwalPelajaran::with(['mataPelajaran', 'guru'])
+        ->where('guru_id', $user->id)
+        ->orderBy('hari')
+        ->orderBy('jam_mulai')
+        ->get();
+
+    $sesiAktif = SesiAbsensi::whereIn('jadwal_pelajaran_id', $jadwals->pluck('id'))
+        ->where('status', 'aktif')
+        ->where('berakhir_at', '>', now())
+        ->get();
+
+    return view('guru.jadwal', compact('user', 'jadwals', 'sesiAktif'));
+}
+
+public function sesiGuru()
+{
+    $user = auth()->user();
+    abort_unless($user->role === 'guru', 403);
+
+    $jadwalIds = JadwalPelajaran::where('guru_id', $user->id)->pluck('id');
+
+    $sesiAktif = SesiAbsensi::with('jadwalPelajaran.mataPelajaran')
+        ->whereIn('jadwal_pelajaran_id', $jadwalIds)
+        ->where('status', 'aktif')
+        ->where('berakhir_at', '>', now())
+        ->latest('mulai_at')
+        ->get();
+
+    $jadwals = JadwalPelajaran::where('guru_id', $user->id)->get();
+
+    return view('guru.sesi-absensi', compact('user', 'jadwals', 'sesiAktif'));
+}
+
+2) Di routes/web.php, di dalam group middleware('auth'), tambahkan:
+
+Route::get('/guru/jadwal', [AdminController::class, 'jadwalGuru'])
+    ->name('guru.jadwal');
+
+Route::get('/guru/sesi-absensi', [AdminController::class, 'sesiGuru'])
+    ->name('guru.sesi');
+
+Catatan:
+- Route dashboard yang sudah ada tidak perlu diganti; AdminController::dashboard() tetap memasok $user, $jadwals, dan $sesiAktif ke dashboard Guru.
+- Route mulai/tutup/QR yang sudah ada tidak perlu diganti.
+- Pada halaman Sesi Absensi, tombol Tutup Sesi di controller saat ini redirect ke route('dashboard'), jadi setelah menutup sesi pengguna kembali ke dashboard ringkasan. Ini sengaja dipertahankan agar alur lama tidak berubah.
+- File tampilan memakai nama route guru.jadwal dan guru.sesi; pastikan dua route di atas ditambahkan sebelum mencoba halaman.
+- CSS pada tampilan mobile sekarang menampilkan nav dan logout agar logout tidak tersembunyi. Pada desktop, sidebar memiliki min-height 100vh dan sidebar-bottom menggunakan margin-top:auto.

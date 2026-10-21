@@ -155,12 +155,17 @@ padding:8px 12px;
 
 <div class="main">
 
+
 @include('partials.navbar')
 
 @yield('content')
 
 </div>
 
-</body>
+{{-- Bootstrap JavaScript agar modal berfungsi --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
+@stack('scripts')
+
+</body>
 </html>

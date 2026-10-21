@@ -1,73 +1,89 @@
+
 <div class="sidebar">
 
-<h4>
+    <h4>
+        <img src="{{ asset('images/ChatGPT Image 27 Jul 2026, 15.19.19.png') }}" width="70">
+        <br><br>
+        Absensi
+        <br>
+        Bhinneka
+    </h4>
 
-<img src="{{ asset('images/ChatGPT Image 27 Jul 2026, 15.19.19.png') }}" width="70">
+    <a href="{{ route('dashboard') }}">
+        <i class="bi bi-speedometer2"></i>
+        Dashboard
+    </a>
 
-<br><br>
+    <a href="{{ route('users') }}">
+        <i class="bi bi-people"></i>
+        Kelola Akun
+    </a>
 
-Absensi
-
-<br>
-
-Bhinneka
-
-</h4>
-
-<a href="{{ route('dashboard') }}">
-
-<i class="bi bi-speedometer2"></i>
-
-Dashboard
-
+    <a href="{{ route('data-guru') }}">
+    <i class="bi bi-people-fill"></i>
+    <span>Data Guru</span>
 </a>
 
-<a href="{{ route('users') }}">
-
-<i class="bi bi-people"></i>
-
-Kelola Akun
-
+<a href="{{ route('data-siswa') }}">
+    <i class="bi bi-mortarboard"></i>
+    Data Siswa
 </a>
 
-<a href="#">
-
-<i class="bi bi-person-workspace"></i>
-
-Data Guru
-
+    <a href="{{ route('rekap-absensi') }}">
+    <i class="bi bi-file-earmark-bar-graph"></i>
+    Rekap Absensi
 </a>
-
-<a href="#">
-
-<i class="bi bi-mortarboard"></i>
-
-Data Siswa
-
+<a href="{{ route('laporan-absensi') }}">
+    <i class="bi bi-file-earmark-bar-graph"></i>
+    Laporan
 </a>
+    {{-- Tombol Logout --}}
+    <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+    </a>
 
-<a href="#">
+</div>
 
-<i class="bi bi-calendar-check"></i>
+{{-- Modal Konfirmasi Logout --}}
+<div class="modal fade" id="logoutModal" tabindex="-1"
+     aria-labelledby="logoutModalLabel" aria-hidden="true">
 
-Absensi
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
 
-</a>
+            <div class="modal-body text-center p-4">
 
-<a href="#">
+                <i class="bi bi-box-arrow-right text-danger"
+                   style="font-size: 3rem;"></i>
 
-<i class="bi bi-file-earmark-bar-graph"></i>
+                <h4 class="fw-bold mt-3" id="logoutModalLabel">
+                    Mau Logout?
+                </h4>
 
-Laporan
+                <p class="text-muted">
+                    Apakah kamu yakin ingin keluar dari akunmu?
+                </p>
 
-</a>
+                <div class="d-flex justify-content-center gap-2">
 
-<a href="#">
+                    <button type="button"
+                            class="btn btn-light border px-4"
+                            data-bs-dismiss="modal">
+                        Batal
+                    </button>
 
-<i class="bi bi-box-arrow-right"></i>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
 
-Logout
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Ya, Logout
+                        </button>
+                    </form>
 
-</a>
-
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

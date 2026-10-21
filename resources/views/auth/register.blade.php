@@ -191,26 +191,10 @@ Setelah melakukan pendaftaran, akun Anda akan berstatus <b>Pending</b> dan harus
 
 <form action="{{ route('register.store') }}" method="POST">
     @csrf
-<div class="mb-3">
-
-<label class="form-label">Role</label>
-
-<select class="form-select" id="role" name="role" required>
-    <option value="" selected disabled>-- Pilih Role --</option>
-    <option value="guru">👨‍🏫 Guru</option>
-    <option value="kepala_sekolah">👔 Kepala Sekolah</option>
-    <option value="siswa">🎓 Siswa</option>
-</select>
-
-</div>
 
 <div class="mb-3">
 
-<label class="form-label" id="labelIdentitas">
-
-NIP / NIS
-
-</label>
+<label class="form-label">NIS atau NIS</label>
 
 <input
 type="text"
@@ -368,60 +352,10 @@ Login
 
 <script>
 
-const role = document.getElementById("role");
-const labelIdentitas = document.getElementById("labelIdentitas");
 
 const kelasGroup = document.getElementById("kelas-group");
 const jenjang = document.getElementById("jenjang");
 const kelas = document.getElementById("kelas");
-
-role.addEventListener("change", function(){
-
-    if(this.value=="guru"){
-
-        labelIdentitas.innerHTML="NIP";
-
-        kelasGroup.style.display="none";
-
-        jenjang.required=false;
-        kelas.required=false;
-
-    }
-
-    else if(this.value=="kepala_sekolah"){
-
-        labelIdentitas.innerHTML="NIP Kepala Sekolah";
-
-        kelasGroup.style.display="none";
-
-        jenjang.required=false;
-        kelas.required=false;
-
-    }
-
-    else if(this.value=="siswa"){
-
-        labelIdentitas.innerHTML="NIS";
-
-        kelasGroup.style.display="block";
-
-        jenjang.required=true;
-        kelas.required=true;
-
-    }
-
-    else{
-
-        labelIdentitas.innerHTML="NIP / NIS";
-
-        kelasGroup.style.display="none";
-
-        jenjang.required=false;
-        kelas.required=false;
-
-    }
-
-});
 
 jenjang.addEventListener("change",function(){
 
